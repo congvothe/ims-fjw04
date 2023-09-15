@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${jobDto.id == null ? 'Create Job' : 'Update Job'}"></title>
+    <th:block th:insert="/fragment/head"/>
+</head>
+<body>
+        <th:block th:insert="/fragment/header"/>
+        <div>
+            <div>
+                <h3 class="text-center fw-bold text-uppercase my-2">Job</h3>
+            </div>
+        <div class="px-3">
+            <nav style="--bs-breadcrumb-divider: '>'">
+                <ul class="breadcrumb m-0 pb-3 fw-bold">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/view-job}" class="text-body text-decoration-none">Job List</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a th:href="@{${jobDto.id == null ? '/create-job' : '/update-job/' + jobDto.id + '?page=' + page}}"
+                           class="text-body text-decoration-none"
+                           th:text="${jobDto.id == null ? 'Create Job' : 'Update Job'}">
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <form th:action="@{${jobDto.id == null ? '/create-job':'/update-job/' + jobDto.id + '?page=' + page}}"
+              method="post" th:object="${jobDto}">
+            <div class="w-100 create-job-content px-3 pt-4 pb-3 position-relative">
+                <div th:if="${createJobSuccess}" class="alert alert-success d-flex align-items-center text-success">
+                    <i class="fas fa-check-circle me-2 fs-4"></i>
+                    <span class="fw-bolder" th:text="#{${createJobSuccess}}"></span>
+                </div>
+                <div th:if="${updateJobSuccess}" class="alert alert-success d-flex align-items-center text-success">
+                    <i class="fas fa-check-circle me-2 fs-4"></i>
+                    <span class="fw-bolder" th:text="#{${updateJobSuccess}}"></span>
+                </div>
+                <div class="row my-3 align-items-start">
+                    <div class="col d-flex flex-wrap">
+                        <label for="title" class="col-form-label width-form-label fw-bold">Job title
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" id="title" class="form-control w-75" th:field="*{title}">
+                        <span class="text-danger fw-bolder margin-form-error pt-2" th:errors="*{title}"></span>
+                    </div>
+                    <div class="col d-flex justify-content-end flex-wrap">
+                        <label class="col-form-label width-form-label fw-bold">Salary range</label>
+                        <div class="d-flex w-75 flex-wrap">
+                            <div class="d-flex w-50 align-items-center">
+                                <label for="salaryFrom" class="col-form-label fw-bold mx-3">
+                                    From
+                                </label>
+                                <input type="text" id="salaryFrom" class="form-control w-50" th:field="*{salaryFrom}">
+                                <span class="fw-bold px-2">($)</span>
+                            </div>
+                            <div class="d-flex w-50 align-items-center">
+                                <label for="salaryTo" class="col-form-label fw-bold mx-3">
+                                    To
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" id="salaryTo" class="form-control w-50" th:field="*{salaryTo}">
+                                <span class="fw-bold px-2">($)</span>
+                            </div>
+                            <span class="text-danger fw-bolder margin-form-error pt-2 mx-0" th:errors="*{salaryTo}">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3 align-items-start">
+                    <div class="col d-flex flex-wrap">
+                        <label for="startDate" class="col-form-label width-form-label fw-bold">Start date
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="date" id="startDate" class="form-control w-75" th:field="*{startDate}">
+                        <span class="text-danger fw-bolder margin-form-error pt-2" th:errors="*{startDate}"></span>
+                    </div>
+                    <div class="col d-flex justify-content-end flex-wrap">
+                        <label for="endDate" class="col-form-label width-form-label fw-bold">End date
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="date" id="endDate" class="form-control w-75" th:field="*{endDate}">
+                        <span class="text-danger w-75 fw-bolder margin-form-error pt-2" th:errors="*{endDate}"></span>
+                    </div>
+                </div>
+                <div class="row my-3 align-items-start">
+                    <div class="col d-flex flex-wrap">
+                        <label for="skills" class="col-form-label width-form-label fw-bold">Skills
+                            <span class="text-danger">*</span>
+                        </label>
+                        <select id="skills" th:field="*{skillIds}" class="form-select w-75" multiple>
+                            <option th:each="skill : ${skills}" th:value="${skill.id}"
+                                    th:text="${skill.name}"></option>
+                        </select>
+                        <span class="text-danger fw-bolder margin-form-error pt-2" th:errors="*{skillIds}"></span>
+                    </div>
+                    <div class="col d-flex justify-content-end flex-wrap">
+                        <label for="levels" class="col-form-label width-form-label fw-bold">Levels
+                            <span class="text-danger">*</span>
+                        </label>
+                        <select id="levels" th:field="*{levelIds}" class="search-choice form-select w-75"
+                                multiple="multiple">
+                            <option th:each="level : ${levels}" th:value="${{level.id}}"
+                                    th:text="${level.name}"></option>
+                        </select>
+                        <span class="text-danger fw-bolder w-75 pt-2" th:errors="*{levelIds}"></span>
+                    </div>
+                </div>
+                <div class="row my-3 align-items-start">
+                    <div class="col d-flex flex-wrap">
+                        <label for="address" class="col-form-label width-form-label fw-bold">Address</label>
+                        <input type="text" id="address" class="form-control w-75" th:field="*{address}">
+                        <div th:if="${jobDto.id}" class="mt-3 d-flex w-100">
+                            <label for="status" class="col-form-label width-form-label fw-bold">Status</label>
+                            <select id="status" th:field="*{statusId}" class="form-select w-75">
+                                <option th:each="status : ${statuses}" th:value="${status.key}"
+                                        th:text="${status.value}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col d-flex justify-content-end flex-wrap">
+                        <label for="descriptions" class="col-form-label width-form-label fw-bold">Descriptions</label>
+                        <textarea id="descriptions" rows="4" class="form-control w-75" th:field="*{description}"
+                                  placeholder="N/A"></textarea>
+                    </div>
+                </div>
+                <div class="position-absolute bottom-0 start-50 translate-middle-x mb-5">
+                    <button type="submit" class="btn btn-primary fw-bold px-3 me-3">Submit</button>
+                    <a th:href="@{${jobDto.id == null ? '/view-job' : '/view-job?page=' + page}}"
+                       class="btn btn-primary fw-bold px-3 ms-3">Cancel</a>
+                </div>
+            </div>
+        </form>
+        </div>
+<th:block th:insert="/fragment/last"/>
+</body>
+</html>

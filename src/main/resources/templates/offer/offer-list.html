@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Offer List</title>
+    <th:block th:insert="/fragment/head"/>
+</head>
+<body>
+    <th:block th:insert="/fragment/header"/>
+    <div>
+        <div>
+            <h3 class="text-center fw-bold text-uppercase my-2">Offer</h3>
+        </div>
+        <div class="px-3">
+            <ul class="breadcrumb m-0 pb-3 fw-bold">
+                <li class="breadcrumb-item">
+                    <a th:href="@{/view-offer}" class="text-body text-decoration-none">Offer List</a>
+                </li>
+            </ul>
+        </div>
+        <div class="d-flex align-items-center mb-4 px-3">
+            <div class="w-100 d-flex">
+                <form class="input-group"
+                      th:action="@{/view-offer(search=${search}, department=${department}, status=${status})}">
+                    <div class="w-25 me-3 input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="search"
+                               th:value="${search}">
+                        <button class="btn bg-white border" type="submit" title="search">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <ul class="navbar-nav border w-25 text-body rounded-2 me-3">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link text-body padding-link-sort d-flex justify-content-between align-items-center"
+                               href data-bs-toggle="dropdown" aria-expanded="false">
+                                <input hidden th:value="${department}" name="department">
+                                <span th:if="${department == null}">Department</span>
+                                <span th:if="${department == null ? false : 'IT'.equals(department.name())}">
+                                    IT
+                                </span>
+                                <span th:if="${department == null ? false : 'HR'.equals(department.name())}">
+                                    HR
+                                </span>
+                                <span th:if="${department == null ? false : 'FINANCE'.equals(department.name())}">
+                                    Finance
+                                </span>
+                                <span th:if="${department == null ? false : 'COMMUNICATION'.equals(department.name())}">
+                                    Communication
+                                </span>
+                                <span th:if="${department == null ? false : 'MARKETING'.equals(department.name())}">
+                                    Marketing
+                                </span>
+                                <span th:if="${department == null ? false : 'ACCOUNTING'.equals(department.name())}">
+                                    Accounting
+                                </span>
+                                <i class="fas fa-chevron-down float-end"></i>
+                            </a>
+                            <ul class="dropdown-menu w-100 p-0 dropdown-menu-role rounded-0">
+                                <li>
+                                    <a class="dropdown-item padding-link-sort"
+                                       th:href="@{/view-offer(search=${search}, status=${status})}">
+                                        Department
+                                    </a>
+                                </li>
+                                <li th:each="department : ${T(com.fa.ims.enums.Department).values()}">
+                                    <a class="dropdown-item padding-link-sort"
+                                       th:href="@{/view-offer(search=${search}, department=${department}, status=${status})}"
+                                       th:text="${department.label}">
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav border w-25 text-body rounded-2">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link text-body padding-link-sort d-flex justify-content-between align-items-center"
+                               href data-bs-toggle="dropdown" aria-expanded="false">
+                                <input hidden th:value="${status}" name="status">
+                                <span th:if="${status == null || status.isEmpty()}">Status</span>
+                                <span th:if="${status == null ? false : 'Waiting for approval'.equals(status)}">
+                                    Waiting for approval
+                                </span>
+                                <span th:if="${status == null ? false : 'Approved offer'.equals(status)}">
+                                    Approved offer
+                                </span>
+                                <span th:if="${status == null ? false : 'Rejected offer'.equals(status)}">
+                                    Rejected offer
+                                </span>
+                                <span th:if="${status == null ? false : 'Waiting for response'.equals(status)}">
+                                    Waiting for response
+                                </span>
+                                <span th:if="${status == null ? false : 'Accepted offer'.equals(status)}">
+                                    Accepted offer
+                                </span>
+                                <span th:if="${status == null ? false : 'Declined offer'.equals(status)}">
+                                    Declined offer
+                                </span>
+                                <span th:if="${status == null ? false : 'Cancelled offer'.equals(status)}">
+                                    Cancelled offer
+                                </span>
+                                <i class="fas fa-chevron-down float-end"></i>
+                            </a>
+                            <ul class="dropdown-menu w-100 p-0 dropdown-menu-role rounded-0">
+                                <li>
+                                    <a class="dropdown-item padding-link-sort"
+                                       th:href="@{/view-offer(search=${search}, department=${department})}">
+                                        Status
+                                    </a>
+                                </li>
+                                <li th:each="status : ${statuses}">
+                                    <a class="dropdown-item padding-link-sort"
+                                       th:href="@{/view-offer(search=${search}, department=${department}, status=${status.value})}"
+                                       th:text="${status.value}">
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+            <div class="d-flex">
+                <a th:href="@{/select-offer-candidate}"><i class="fas fa-plus-circle fs-3 text-body"></i></a>
+            </div>
+        </div>
+        <div class="w-100 offer-content px-3">
+            <table class="table table-bordered table-hover table-striped table-light border-dark">
+                <thead class="table-primary border-dark text-center">
+                <tr class="text-center">
+                    <th class="offer-management-id">No</th>
+                    <th class="offer-management-candidate">Candidate Name</th>
+                    <th class="offer-management-email">Email</th>
+                    <th class="offer-management-approved">Approved</th>
+                    <th class="offer-management-department">Department</th>
+                    <th class="offer-management-notes">Notes</th>
+                    <th class="offer-management-status">Status</th>
+                    <th class="offer-management-action">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="offer, i : ${offerDtos.content}">
+                    <td class="text-center" th:text="${(i.index + 1) + (offerDtos.number * size)}"></td>
+                    <td th:each="candidate : ${candidateMap}" th:if="${candidate.key == offer.id}"
+                        th:text="${candidate.value.fullName}"></td>
+                    <td th:each="candidate : ${candidateMap}" th:if="${candidate.key == offer.id}"
+                        th:text="${candidate.value.email}"></td>
+                    <td th:each="user : ${userMap}" th:if="${user.key == offer.id}" th:text="${user.value}"></td>
+                    <td class="text-center" th:text="${offer.department}"></td>
+                    <td th:text="${offer.notes}"></td>
+                    <td th:each="status : ${statuses}" th:if="${offer.statusId == status.key}"
+                        th:text="${status.value}" class="text-center">
+                    </td>
+                    <td class="text-center">
+                        <a class="text-decoration-none" th:href="@{result-offer/{id}(id=${offer.id})}">
+                            <i class="fas fa-check-circle fs-5 text-dark me-1"></i>
+                        </a>
+                        <a class="text-decoration-none" th:href="@{update-offer/{id}(id=${offer.id},page=${offerDtos.number})}">
+                            <i class="far fa-edit fs-5 text-dark ms-1"></i>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <ul class="pagination justify-content-end mx-5 mt-4 pb-4 mb-0" th:if="${offerDtos.totalPages > 0}">
+                <li class="page-item"
+                    th:classappend="${offerDtos.number == 0 ? 'disabled cursor-not-allowed' : ''}">
+                    <a class="page-link" th:classappend="${offerDtos.number == 0 ? '' : 'text-dark'}"
+                       th:href="@{/view-offer(page=${offerDtos.number - 1})}">
+                        Previous
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link text-dark" th:text="${offerDtos.number + 1}"></a>
+                </li>
+                <li class="page-item"
+                    th:classappend="${offerDtos.number == offerDtos.totalPages - 1
+                            ? 'disabled cursor-not-allowed' : ''}">
+                    <a class="page-link"
+                       th:classappend="${offerDtos.number == offerDtos.totalPages - 1 ? '' : 'text-dark'}"
+                       th:href="@{/view-offer(page=${offerDtos.number + 1}, search=${search}, department=${department},
+                       status=${status})}">
+                        Next
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <th:block th:insert="/fragment/last"/>
+</body>
+</html>

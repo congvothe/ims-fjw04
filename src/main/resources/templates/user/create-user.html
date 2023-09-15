@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create User</title>
+    <th:block th:insert="/fragment/head"/>
+</head>
+<body>
+    <th:block th:insert="/fragment/header"/>
+    <div>
+        <div>
+            <h3 class="text-center fw-bold text-uppercase my-2">Create User</h3>
+        </div>
+        <div class="px-3">
+            <nav style="--bs-breadcrumb-divider: '>'">
+                <ul class="breadcrumb m-0 pb-3 fw-bold">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/user-management}" class="text-body text-decoration-none">
+                            User List
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/create-user}" class="text-body text-decoration-none">
+                            Create User
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <form th:action="@{/create-user}" method="post" th:object="${userDTO}">
+            <div class="w-100 create-user-content px-3 pt-4 position-relative">
+                <div th:if="${createUserSuccess}" class="alert alert-success d-flex align-items-center text-success">
+                    <i class="fas fa-check-circle me-2 fs-4"></i>
+                    <span class="fw-bolder" th:text="#{${createUserSuccess}}"></span>
+                </div>
+                <div class="row my-3 align-items-start">
+                    <div class="col d-flex flex-wrap">
+                        <label for="fullName" class="col-form-label width-form-label fw-bold">Full name
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" id="fullName" class="form-control w-75" th:field="*{fullName}">
+                        <span class="text-danger fw-bolder margin-form-error pt-2" th:errors="*{fullName}"></span>
+                    </div>
+                    <div class="col d-flex justify-content-end flex-wrap">
+                        <label for="email" class="col-form-label width-form-label fw-bold">Email
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" id="email" class="form-control w-75" th:field="*{email}">
+                        <span class="text-danger fw-bolder w-75 pt-2" th:errors="*{email}"></span>
+                    </div>
+                </div>
+                <div class="row my-3 align-items-start">
+                    <div class="col d-flex flex-wrap">
+                        <label for="username" class="col-form-label width-form-label fw-bold">Username
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" id="username" class="form-control w-75" th:field="*{username}">
+                        <span class="text-danger fw-bolder margin-form-error pt-2" th:errors="*{username}"></span>
+                    </div>
+                    <div class="col d-flex justify-content-end flex-wrap">
+                        <label for="password" class="col-form-label width-form-label fw-bold">Password
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="password" id="password" class="form-control w-75" th:field="*{password}">
+                        <span class="text-danger fw-bolder w-75 pt-2" th:errors="*{password}"></span>
+                    </div>
+                </div>
+                <div class="row my-3 align-items-start">
+                    <div class="col d-flex flex-wrap">
+                        <label for="dateOfBirth" class="col-form-label width-form-label fw-bold">D.O.B</label>
+                        <input type="date" id="dateOfBirth" class="form-control w-75"
+                               th:field="*{dateOfBirth}">
+                    </div>
+                    <div class="col d-flex justify-content-end flex-wrap">
+                        <label for="address" class="col-form-label width-form-label fw-bold">Address</label>
+                        <input type="text" id="address" class="form-control w-75" th:field="*{address}">
+                    </div>
+                </div>
+                <div class="row my-3 align-items-start">
+                    <div class="col d-flex flex-wrap">
+                        <label for="phoneNumber" class="col-form-label width-form-label fw-bold">Phone Number</label>
+                        <input type="text" id="phoneNumber" class="form-control w-75" th:field="*{phoneNumber}">
+                    </div>
+                    <div class="col d-flex justify-content-end flex-wrap">
+                        <label for="gender" class="col-form-label width-form-label fw-bold">Gender
+                            <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select w-75" id="gender" th:field="*{gender}">
+                            <option hidden value="">Select a gender</option>
+                            <option value="MALE">Male</option>
+                            <option value="FEMALE">Female</option>
+                        </select>
+                        <span class="text-danger fw-bolder w-75 pt-2" th:errors="*{gender}"></span>
+                    </div>
+                </div>
+                <div class="row my-3 align-items-start">
+                    <div class="col d-flex flex-wrap">
+                        <label for="role" class="col-form-label width-form-label fw-bold">Roles
+                            <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select w-75" id="role" th:field="*{role}">
+                            <option hidden value="">Select a roles</option>
+                            <option th:each="role : ${roles}" th:value="${role.role}" th:text="${role.role}"></option>
+                        </select>
+                        <span class="text-danger fw-bolder margin-form-error pt-2" th:errors="*{role}"></span>
+                    </div>
+                    <div class="col d-flex justify-content-end flex-wrap">
+                        <label for="department" class="col-form-label width-form-label fw-bold">Department
+                            <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select w-75" id="department" th:field="*{department}">
+                            <option hidden value="">Select a department</option>
+                            <option value="IT">IT</option>
+                            <option value="HR">HR</option>
+                            <option value="FINANCE">Finance</option>
+                            <option value="COMMUNICATION">Communication</option>
+                            <option value="MARKETING">Marketing</option>
+                            <option value="ACCOUNTING">Accounting</option>
+                        </select>
+                        <span class="text-danger fw-bolder w-75 pt-2" th:errors="*{department}"></span>
+                    </div>
+                </div>
+                <div class="row my-3 align-items-start">
+                    <div class="col d-flex flex-wrap">
+                        <label for="status" class="col-form-label width-form-label fw-bold">Status
+                            <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select w-75" id="status" th:field="*{status}">
+                            <option hidden value="">Select a status</option>
+                            <option value="ACTIVATED">Activated</option>
+                            <option value="DE_ACTIVATED">De-activated</option>
+                        </select>
+                        <span class="text-danger fw-bolder margin-form-error" th:errors="*{status}"></span>
+                    </div>
+                    <div class="col d-flex justify-content-end flex-wrap">
+                        <label for="note" class="col-form-label width-form-label fw-bold">Note
+                        </label>
+                        <textarea id="note" class="form-control w-75" placeholder="N/A" rows="4"
+                                  th:field="*{note}"></textarea>
+                    </div>
+                </div>
+                <div class="position-absolute bottom-0 start-50 translate-middle-x mb-3">
+                    <button type="submit" class="btn btn-primary fw-bold px-3 me-3">Submit</button>
+                    <a th:href="@{/user-management}" class="btn btn-primary fw-bold px-3 ms-3">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:insert="/fragment/last"/>
+</body>
+</html>

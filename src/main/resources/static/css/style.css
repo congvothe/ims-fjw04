@@ -1,0 +1,157 @@
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+.navbar-item {
+    font-size: 16px;
+    text-transform: uppercase;
+    width: 116px;
+}
+.navbar-item-padding {
+    padding-top: 9px;
+    padding-bottom: 9px;
+}
+.dropdown-menu-end {
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+.create-user-content,
+.form-login,
+.interview-table,
+.user-management-content,
+.candidate-content,
+.candidate-form,
+.job-content,
+.create-interview-content,
+.create-job-content,
+.form-offer-content {
+    background-color: rgb(229, 239, 248);
+}
+.interview-table,
+.job-content {
+    min-height: 560px;
+}
+.height-inherit {
+    height: inherit;
+}
+.login-logo-size {
+    height: 42px;
+}
+.create-user-content,
+.create-interview-content,
+.create-job-content {
+    min-height: 622px;
+}
+.width-form-label {
+    width: 126px;
+}
+.margin-form-button {
+    margin-top: 260px;
+}
+.margin-form-error {
+    margin-left: 126px;
+}
+.padding-link-sort {
+    padding: 6px 12px!important;
+}
+.dropdown-menu-role {
+    transform: translate(0px, 36px)!important;
+}
+.user-management-content,
+.candidate-content {
+    min-height: 560px;
+}
+.candidate-management-id,
+.job-management-id,
+.interview-management-id,
+.offer-management-id {
+    width: 2%;
+}
+.candidate-management-action,
+.candidate-management-name {
+    width: 12%;
+}
+.candidate-management-email {
+    width: 18%;
+}
+.candidate-management-phone,
+.candidate-management-status,
+.candidate-management-position,
+.candidate-management-user {
+    width: 14%;
+}
+.cursor-not-allowed {
+    cursor: not-allowed;
+}
+.job-management-skill {
+    width: 23%;
+}
+.job-management-level {
+    width: 27%;
+}
+.job-management-startDate,
+.job-management-endDate {
+    width: 10%
+}
+.job-management-title {
+    width: 12%;
+}
+.job-management-status,
+.job-management-action {
+    width: 8%;
+}
+.interview-management-name {
+    width: 16%;
+}
+.interview-management-interviewer,
+.interview-management-schedule {
+    width: 18%;
+}
+.interview-management-title,
+.interview-management-status {
+    width: 14%;
+}
+.interview-management-result {
+    width: 8%;
+}
+.interview-management-action {
+    width: 10%;
+}
+.select-candidate-offer {
+    width: 60%;
+}
+.form-offer-content {
+    min-height: 622px;
+}
+.offer-management-candidate,
+.offer-management-approved,
+.offer-management-department {
+    width: 12%;
+}
+
+.offer-management-email,
+.offer-management-status {
+    width: 16%;
+}
+.offer-management-notes {
+    width: 20%;
+}
+.offer-management-action {
+    width: 12%;
+}
+
+/*FIXME*/
+.user-management-name,
+.user-management-username,
+.user-management-email,
+.user-management-phone {
+    width: 15%;
+}
+/*FIXME*/
+.user-management-role,
+.user-management-status,
+.user-management-action {
+    width: calc(35%/3);
+}

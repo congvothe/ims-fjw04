@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Interview Schedule</title>
+    <th:block th:insert="/fragment/head"/>
+</head>
+<body>
+
+            <th:block th:insert="/fragment/header"/>
+        <div>
+            <div>
+                <h3 class="text-center fw-bold text-uppercase my-2">Interview Schedule</h3>
+            </div>
+            <div class="px-3">
+                <ul class="breadcrumb m-0 pb-3 fw-bold">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{view-interview}" class="text-body text-decoration-none">Interview Schedule List</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="d-flex align-items-center mb-4 px-3">
+                <div class="w-100 d-flex">
+                    <form class="input-group flex-nowrap"
+                          th:action="@{/view-interview(search=${search}, result=${result}, date=${date},
+                          status=${status})}">
+                        <div class="w-25 me-3 input-group">
+                            <input type="text" class="form-control" placeholder="Search" name="search"
+                                   th:value="${search}">
+                            <button class="btn bg-white border" type="submit" title="search">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <div class="w-25 me-3 input-group">
+                            <input type="date" class="form-control" name="date"
+                                   th:value="${date}">
+                            <button class="btn bg-white border" type="submit" title="search">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <ul class="navbar-nav border w-25 text-body rounded-2 me-3" >
+                            <li class="nav-item dropdown">
+                                <a class="nav-link text-body padding-link-sort d-flex justify-content-between align-items-center"
+                                   href data-bs-toggle="dropdown" aria-expanded="false">
+                                    <input hidden th:value="${result}" name="result">
+                                    <span th:if="${result == null}">Result</span>
+                                    <span th:if="${result == null ? false : 'PENDING_RESULT'.equals(result.name())}">
+                                        Pending Result
+                                    </span>
+                                    <span th:if="${result == null ? false : 'OPEN'.equals(result.name())}">
+                                        Open
+                                    </span>
+                                    <span th:if="${result == null ? false : 'FAIL'.equals(result.name())}">
+                                        Fail
+                                    </span>
+                                    <span th:if="${result == null ? false : 'PASS'.equals(result.name())}">
+                                        Pass
+                                    </span>
+                                    <span th:if="${result == null ? false : 'CANCEL'.equals(result.name())}">
+                                        Cancel
+                                    </span>
+                                    <i class="fas fa-chevron-down float-end"></i>
+                                </a>
+                                <ul class="dropdown-menu w-100 p-0 dropdown-menu-role rounded-0">
+                                    <li>
+                                        <a class="dropdown-item padding-link-sort"
+                                           th:href="@{/view-interview(search=${search},
+                                           status=${status})}">
+                                            Result
+                                        </a>
+                                    </li>
+                                    <li th:each="result : ${T(com.fa.ims.enums.InterviewResult).values()}">
+                                        <a class="dropdown-item padding-link-sort"
+                                           th:href="@{/view-interview(search=${search}, date=${date}, result=${result},
+                                           status=${status})}" th:text="${result.label}">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav border w-25 text-body rounded-2 me-3">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link text-body padding-link-sort d-flex justify-content-between align-items-center"
+                                   href data-bs-toggle="dropdown" aria-expanded="false">
+                                    <input hidden th:value="${status}" name="status">
+                                    <span th:if="${status == null || status.isEmpty()}">Status</span>
+                                    <span th:if="${status == null ? false : 'Waiting for interview'.equals(status)}">
+                                        Waiting for interview
+                                    </span>
+                                    <span th:if="${status == null ? false : 'In-progress'.equals(status)}">
+                                        In-progress
+                                    </span>
+                                    <span th:if="${status == null ? false : 'Cancelled interview'.equals(status)}">
+                                        Cancelled interview
+                                    </span>
+                                    <span th:if="${status == null ? false : 'Passed Interview'.equals(status)}">
+                                        Passed Interview
+                                    </span>
+                                    <span th:if="${status == null ? false : 'Failed interview'.equals(status)}">
+                                        Failed interview
+                                    </span>
+                                    <i class="fas fa-chevron-down float-end"></i>
+                                </a>
+                                <ul class="dropdown-menu w-100 p-0 dropdown-menu-role rounded-0">
+                                    <li>
+                                        <a class="dropdown-item padding-link-sort"
+                                           th:href="@{/view-interview(search=${search},
+                                           result=${result})}">
+                                            Status
+                                        </a>
+                                    </li>
+                                    <li th:each="status : ${statusWithStateInterview}">
+                                        <a class="dropdown-item padding-link-sort"
+                                           th:href="@{/view-interview(search=${search}, date=${date}, result=${result},
+                                           status=${status.value})}"
+                                           th:text="${status.value}">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </form>
+                </div>
+                <div>
+                    <a th:href="@{/create-interview}"><i class="fas fa-plus-circle fs-2 text-body"></i></a>
+                </div>
+            </div>
+            <div class="w-100 interview-table px-3">
+                <table class="table table-bordered table-hover table-striped table-light border-dark">
+                    <div th:if="${deleteInterviewSuccess}" class="alert alert-success d-flex align-items-center text-success">
+                        <i class="fas fa-check-circle me-2 fs-4"></i>
+                        <span class="fw-bolder" th:text="#{${deleteInterviewSuccess}}"></span>
+                    </div>
+                    <thead class="table-primary border-dark text-center">
+                        <tr>
+                            <th class="interview-management-id">No</th>
+                            <th class="interview-management-title">Title</th>
+                            <th class="interview-management-name">Candidate Name</th>
+                            <th class="interview-management-interviewer">Interviewer</th>
+                            <th class="interview-management-schedule">Schedule</th>
+                            <th class="interview-management-result">Result</th>
+                            <th class="interview-management-status">Status</th>
+                            <th class="interview-management-action">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="interview, i : ${interviewDtos.content}">
+                            <td class="text-center" th:text="${(i.index + 1) + (interviewDtos.number * size)}"></td>
+                            <td th:text="${interview.title}"></td>
+                            <td th:each="candidate : ${candidates}" th:if="${interview.id == candidate.key}"
+                                th:text="${candidate.value}">
+                            </td>
+                            <td th:each="user : ${users}" th:if="${interview.id == user.key}" th:text="${user.value}">
+                            </td>
+                            <td th:text="${#temporals.format(interview.scheduleDate, 'dd/MM/yyyy')
+                            + (interview.scheduleFrom != null ? ' ' + interview.scheduleFrom : '')
+                            + (interview.scheduleFrom != null && interview.scheduleTo != null ? ' - ' : '')
+                             + (interview.scheduleTo != null ? interview.scheduleTo : '')}">
+                            </td>
+                            <td class="text-center" th:text="${interview.result.label}"></td>
+                            <td class="text-center" th:each="status : ${statuses}" th:if="${interview.statusId == status.key}"
+                                th:text="${status.value}">
+                            </td>
+                            <td class="text-center">
+                                <a class="text-decoration-none"
+                                   th:href="@{/result-interview/{id}(id=${interview.id},page=${interviewDtos.number})}">
+                                    <i class="fas fa-check-circle fs-5 text-dark me-1"></i>
+                                </a>
+                                <a class="text-decoration-none"
+                                   th:href="@{/update-interview/{id}(id=${interview.id},page=${interviewDtos.number})}">
+                                    <i class="far fa-edit fs-5 text-dark mx-1"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ul class="pagination justify-content-end mx-5 mt-4 pb-4 mb-0" th:if="${interviewDtos.totalPages > 0}">
+                    <li class="page-item"
+                        th:classappend="${interviewDtos.number == 0 ? 'disabled cursor-not-allowed' : ''}">
+                        <a class="page-link" th:classappend="${interviewDtos.number == 0 ? '' : 'text-dark'}"
+                           th:href="@{/view-interview(page=${interviewDtos.number - 1}, search=${search},
+                           date=${date}, result=${result}, status=${status})}">
+                            Previous
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link text-dark" th:text="${interviewDtos.number + 1}"></a>
+                    </li>
+                    <li class="page-item"
+                        th:classappend="${interviewDtos.number == interviewDtos.totalPages - 1
+                        ? 'disabled cursor-not-allowed' : ''}">
+                        <a class="page-link"
+                           th:classappend="${interviewDtos.number == interviewDtos.totalPages - 1 ? '' : 'text-dark'}"
+                           th:href="@{/view-interview(page=${interviewDtos.number + 1}, search=${search},
+                           date=${date}, result=${result}, status=${status})}">
+                            Next
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    <th:block th:insert="/fragment/last"/>
+</body>
+</html>

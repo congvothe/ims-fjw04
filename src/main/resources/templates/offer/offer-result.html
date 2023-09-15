@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${offerDto.id == null ? 'Create Offer' : 'Edit Offer'}"></title>
+    <th:block th:insert="/fragment/head"/>
+</head>
+<body>
+<th:block th:insert="/fragment/header"/>
+<div>
+    <div>
+        <h3 class="text-center fw-bold text-uppercase my-2">Offer</h3>
+    </div>
+    <div class="px-3">
+        <div style="--bs-breadcrumb-divider: '>'">
+            <ul class="breadcrumb m-0 pb-3 fw-bold">
+                <li class="breadcrumb-item">
+                    <a th:href="@{/view-offer}" class="text-body text-decoration-none">Offer List</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a class="text-body text-decoration-none">
+                        Update Result Offer
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <form th:action="@{${'/result-offer/' + offerDto.id}}"
+          method="post" th:object="${offerDto}" enctype="multipart/form-data">
+        <div class="w-100 px-3 pt-4 pb-2 form-offer-content">
+            <div th:if="${updateOfferSuccess}" class="alert alert-success d-flex align-items-center text-success">
+                <i class="fas fa-check-circle me-2 fs-4"></i>
+                <span class="fw-bolder" th:text="#{${updateOfferSuccess}}"></span>
+            </div>
+            <div class="row align-items-start">
+                <div class="col d-flex flex-wrap align-items-center">
+                    <label class="col-form-label width-form-label fw-bold">Candidate</label>
+                    <input hidden type="text" id="candidateId" name="candidateId"
+                           th:value="${candidateDto.id}">
+                    <span class="w-75 ps-2" th:text="${candidateDto.fullName}"></span>
+                </div>
+                <div class="col d-flex justify-content-end flex-wrap align-items-center">
+                    <label class="col-form-label width-form-label fw-bold">Position</label>
+                    <input hidden type="text" id="positionId" name="positionId"
+                           th:value="${position.id}">
+                    <span class="w-75 ps-2" th:text="${position.name}"></span>
+                </div>
+            </div>
+            <div class="row mb-3 align-items-start">
+                <div class="col d-flex flex-wrap align-items-center">
+
+                </div>
+                <div class="col d-flex justify-content-end flex-wrap align-items-center">
+                </div>
+            </div>
+            <div class="row my-3 align-items-start">
+                <div class="col d-flex flex-wrap">
+                    <label for="manager" class="col-form-label width-form-label fw-bold">
+                        Approved by
+                        <span class="text-danger">*</span>
+                    </label>
+                    <select class="form-select w-75" id="manager" th:field="*{managerId}" disabled>
+                        <option hidden value="">Manager</option>
+                        <option th:each="userManager : ${usersByRoleManager}"
+                                th:value="${userManager.id}" th:text="${userManager.username}">
+                        </option>
+                    </select>
+                    <span class="text-danger fw-bolder margin-form-error pt-2" th:errors="*{managerId}"></span>
+                </div>
+                <div class="col d-flex justify-content-end flex-wrap">
+                    <label for="userRecruiter" class="col-form-label width-form-label fw-bold">Recruiter
+                        <span class="text-danger">*</span>
+                    </label>
+                    <select class="form-select w-75" id="userRecruiter" th:field="*{recruiterId}" disabled>
+                        <option hidden value="">Recruiter</option>
+                        <option th:each="userRecruiter : ${usersByRoleRecruiter}"
+                                th:value="${userRecruiter.id}" th:text="${userRecruiter.username}">
+                        </option>
+                    </select>
+                    <span class="text-danger fw-bolder w-75 pt-2" th:errors="*{recruiterId}"></span>
+                </div>
+            </div>
+
+            <div class="row my-3 align-items-start">
+                <div class="col d-flex flex-wrap align-items-center">
+                    <label for="statusId" class="col-form-label width-form-label fw-bold" >Status</label>
+                    <select class="form-select w-75" id="statusId" th:field="*{statusId}">
+                        <option th:each="status : ${statuses}"
+                                th:value="${status.key}" th:text="${status.value}">
+                        </option>
+                    </select>
+                </div>
+                <div class="col d-flex justify-content-end flex-wrap">
+                    <label for="department" class="col-form-label width-form-label fw-bold" >Department
+                        <span class="text-danger">*</span>
+                    </label>
+                    <select class="form-select w-75" id="department" th:field="*{department}" disabled>
+                        <option hidden value="">Select department</option>
+                        <option th:each="department : ${T(com.fa.ims.enums.Department).values()}"
+                                th:value="${department}"
+                                th:text="${department.label}"></option>
+                    </select>
+                    <span class="text-danger fw-bolder w-75 pt-2" th:errors="*{department}"></span>
+                </div>
+            </div>
+
+            <div class="row my-3 align-items-start">
+                <div class="col d-flex flex-wrap">
+                    <label for="skillId" class="col-form-label width-form-label fw-bold">Skill
+                        <span class="text-danger">*</span>
+                    </label>
+                    <select class="form-select w-75" id="skillId" th:field="*{skillId}" disabled>
+                        <option hidden value="">Select skill</option>
+                        <option th:each="skill : ${skills}"
+                                th:value="${skill.id}"
+                                th:text="${skill.name}">
+                        </option>
+                    </select>
+                    <span class="text-danger fw-bolder margin-form-error pt-2" th:errors="*{skillId}"></span>
+                </div>
+                <div class="col d-flex justify-content-end flex-wrap">
+                    <label for="levelId" class="col-form-label width-form-label fw-bold">Level
+                        <span class="text-danger">*</span>
+                    </label>
+                    <select class="form-select w-75" id="levelId" th:field="*{levelId}" disabled>
+                        <option hidden value="">Select level</option>
+                        <option th:each="level : ${levels}"
+                                th:value="${level.id}"
+                                th:text="${level.name}"></option>
+                    </select>
+                    <span class="text-danger fw-bolder w-75 pt-2" th:errors="*{levelId}"></span>
+                </div>
+            </div>
+            <div class="row my-3 align-items-start">
+
+
+                <div class="col d-flex flex-wrap align-items-center">
+                    <label class="col-form-label width-form-label fw-bold">Interviewer</label>
+                    <span class="w-75 ps-2" th:text="${usersInterviewer}"></span>
+                </div>
+                <div class="col d-flex justify-content-end flex-wrap">
+                    <label for="contractType" class="col-form-label width-form-label fw-bold">Contract type
+                        <span class="text-danger">*</span>
+                    </label>
+                    <select class="form-select w-75" id="contractType" th:field="*{contractType}" disabled>
+                        <option hidden value="">Contract Type</option>
+                        <option th:each="contractType : ${T(com.fa.ims.enums.ContractType).values()}"
+                                th:value="${contractType}"
+                                th:text="${contractType.label}"></option>
+                    </select>
+                    <span class="text-danger fw-bolder w-75 pt-2" th:errors="*{contractType}"></span>
+                </div>
+            </div>
+            <div class="row my-3 align-items-start">
+                <div class="col d-flex flex-wrap">
+                    <div class="col-form-label width-form-label fw-bold">
+                        Contract start
+                    </div>
+                    <div class="w-75 d-flex">
+                        <div class="d-flex w-50">
+                            <label for="scheduleFrom" class="col-form-label fw-bold me-2">
+                                From
+                            </label>
+                            <input type="date" id="scheduleFrom" class="form-control w-75"
+                                   th:field="*{contractStartFrom}" disabled>
+                        </div>
+                        <div class="d-flex w-50 justify-content-end">
+                            <div class="col-form-label fw-bold me-2">
+                                To
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col d-flex justify-content-end flex-wrap">
+                    <label for="basicSalary" class="col-form-label width-form-label fw-bold">Basic salary
+                    </label>
+                    <input type="text" class="form-control w-75" id="basicSalary" th:field="*{basicSalary}" disabled>
+                </div>
+            </div>
+            <div class="row my-3 align-items-start">
+                <div class="col d-flex flex-wrap">
+                    <label for="interviewNotes" class="col-form-label width-form-label fw-bold">Interviewer
+                    </label>
+                    <textarea id="interviewNotes" readonly class="form-control w-75" rows="4"
+                              th:field="*{interviewNotes}"
+                              placeholder="N/A">
+                    </textarea>
+                </div>
+                <div class="col d-flex justify-content-end flex-wrap">
+                    <label for="notes" class="col-form-label width-form-label fw-bold">Notes</label>
+                    <textarea id="notes" class="form-control w-75" rows="4" th:field="*{notes}" placeholder="N/A">
+                    </textarea>
+                </div>
+            </div>
+
+            <div class="text-center py-4 mt-1">
+                <button type="submit" class="btn btn-primary fw-bold px-3 me-3">Submit</button>
+                <a th:href="@{${offerDto.id == null ? '/view-offer' : '/view-offer'}}"
+                   class="btn btn-primary fw-bold px-3 ms-3">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:insert="/fragment/last"/>
+</body>
+</html>

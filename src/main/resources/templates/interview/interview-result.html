@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Result Interview</title>
+    <th:block th:insert="/fragment/head"/>
+</head>
+<body>
+    <th:block th:insert="/fragment/header"/>
+    <div>
+        <div>
+            <h3 class="text-center fw-bold text-uppercase my-2">Result Interview</h3>
+        </div>
+        <div class="px-3">
+            <nav style="--bs-breadcrumb-divider: '>'">
+                <ul class="breadcrumb m-0 pb-3 fw-bold">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/view-interview}" class="text-body text-decoration-none">
+                            Result Interview
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a th:href="@{${'/result-interview/' + interviewDto.id + '?page=' + page}}"
+                           class="text-body text-decoration-none">
+                            Result Interview
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <form th:action="@{'/result-interview/' + ${interviewDto.id} + '?page=' + ${page}}"
+              method="post" th:object="${interviewDto}">
+            <div class="w-100 create-interview-content px-3 pt-4 position-relative">
+                <div th:if="${updateInterviewSuccess}" class="alert alert-success d-flex align-items-center text-success">
+                    <i class="fas fa-check-circle me-2 fs-4"></i>
+                    <span class="fw-bolder" th:text="#{${updateInterviewSuccess}}"></span>
+                </div>
+                <div class="row my-3 align-items-start">
+                    <div class="col d-flex flex-wrap">
+                        <label for="title" class="col-form-label width-form-label fw-bold">Schedule title
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" id="title" readonly class="form-control w-75" th:field="*{title}">
+                    </div>
+                    <div class="col d-flex justify-content-end flex-wrap">
+                        <label for="meetingId" class="col-form-label width-form-label fw-bold">Meeting ID
+                        </label>
+                        <input type="text" id="meetingId" readonly class="form-control w-75" th:field="*{meetingId}">
+                    </div>
+                </div>
+                <div class="row my-3 align-items-start">
+                    <div class="col d-flex flex-wrap">
+                        <label for="candidate" class="col-form-label width-form-label fw-bold">Candidate
+                            <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select w-75" disabled>
+                            <option th:each="candidate : ${candidates}"
+                                    th:text="${candidate.fullName}">
+                            </option>
+                        </select>
+                        <select class="form-select w-75" id="candidate" th:field="*{candidateId}" hidden>
+                            <option th:each="candidate : ${candidates}" th:value="${candidate.id}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col d-flex justify-content-end flex-wrap">
+                        <label for="location" class="col-form-label width-form-label fw-bold">Location</label>
+                        <input type="text" id="location" readonly class="form-control w-75" th:field="*{location}">
+                    </div>
+                </div>
+                <div class="row my-3 align-items-start">
+                    <div class="col d-flex flex-wrap">
+                        <label for="scheduleDate" class="col-form-label width-form-label fw-bold">
+                            Schedule
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="date" id="scheduleDate" readonly class="form-control w-75" th:field="*{scheduleDate}">
+                    </div>
+                    <div class="col d-flex justify-content-end flex-wrap">
+                        <label for="recruiter" class="col-form-label width-form-label fw-bold">Recruiter
+                            <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select w-75" id="recruiter" th:field="*{recruiterId}" disabled>
+                            <option hidden value="">Select recruiter</option>
+                            <option th:each="recruiter : ${usersByRoleRecruiter}" th:value="${recruiter.id}"
+                                    th:text="${recruiter.username}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row my-3 align-items-start">
+                    <div class="col d-flex flex-wrap">
+                        <div class="col-form-label width-form-label fw-bold">
+                        </div>
+                        <div class="w-75 d-flex">
+                            <div class="d-flex w-50">
+                                <label for="scheduleFrom" class="col-form-label fw-bold me-2">
+                                    From
+                                </label>
+                                <input type="time" id="scheduleFrom" readonly class="form-control w-75" th:field="*{scheduleFrom}">
+                            </div>
+                            <div class="d-flex w-50 justify-content-end">
+                                <label for="scheduleTo" class="col-form-label fw-bold me-2">
+                                    To
+                                </label>
+                                <input type="time" id="scheduleTo" readonly class="form-control w-75" th:field="*{scheduleTo}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col d-flex justify-content-end flex-wrap">
+                    </div>
+                </div>
+                <div th:if="${interviewDto.id}">
+                    <div class="row my-3 align-items-start">
+                        <div class="col d-flex flex-wrap">
+                            <label for="status" class="col-form-label width-form-label fw-bold">Status
+                            </label>
+                            <select class="form-select w-75" id="status" th:field="*{statusId}" disabled>
+                                <option th:each="status : ${statuses}"
+                                        th:value="${status.key}"
+                                        th:text="${status.value}">
+                                </option>
+                            </select>
+                            <span class="text-danger fw-bolder margin-form-error pt-2" th:errors="*{statusId}"></span>
+                        </div>
+                        <div class="col d-flex justify-content-end flex-wrap">
+                            <label for="result" class="col-form-label width-form-label fw-bold">Result
+                            </label>
+                            <select class="form-select w-75" id="result" th:field="*{result}"
+                            th:disabled="${!statusesInterview.containsKey(interviewDto.statusId) ? true : false }">
+                                <option th:each="result : ${T(com.fa.ims.enums.InterviewResult).values()}"
+                                        th:hidden="${result.label.equals('Pending Result')}"
+                                        th:value="${result}"
+                                        th:text="${result.label}">
+                                </option>
+                            </select>
+                            <span class="text-danger fw-bolder w-75 pt-2" th:errors="*{result}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row my-3 align-items-start">
+                    <div class="col d-flex flex-wrap">
+                        <label for="interviewer" class="col-form-label width-form-label fw-bold">Interviewer
+                            <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select w-75" id="interviewer" th:field="*{userIds}" multiple disabled>
+                            <option hidden value="">Select interview</option>
+                            <option th:each="interview : ${usersByRoleInterviewer}" th:value="${interview.id}"
+                                    th:text="${interview.username}"></option>
+                        </select>
+                    </div>
+                    <div class="col d-flex justify-content-end flex-wrap">
+
+                        <label for="notes" class="col-form-label width-form-label fw-bold">Notes</label>
+                        <textarea th:disabled="${!statusesInterview.containsKey(interviewDto.statusId) ? true : false }"
+                                  id="notes" class="form-control w-75" rows="4" th:field="*{notes}" placeholder="N/A">
+                                    </textarea>
+                    </div>
+                </div>
+                <div class="position-absolute bottom-0 start-50 translate-middle-x mb-5">
+                    <button type="submit" class="btn btn-primary fw-bold px-3 me-3">Submit</button>
+                    <a th:href="@{${interviewDto.id == null ? '/view-interview' : '/view-interview?page=' + page}}"
+                       class="btn btn-primary fw-bold px-3 ms-3">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:insert="/fragment/last"/>
+</body>
+</html>
