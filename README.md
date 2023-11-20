@@ -4,9 +4,8 @@
 
 ## Getting started
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+This is my final class project. Our team inludes Hai (leader), Linh, Cong.
+The interview management system (IMS) is a management program for storing and managing candidates database for the company. Manager, interviewr and relevant employees can create and edit jobs, interview schedule, offer to candidates.
 
 ## Add your files
 
